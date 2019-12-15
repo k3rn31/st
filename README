@@ -1,0 +1,19 @@
+# Installation
+For reference:
+https://brianbuccola.com/how-to-build-and-install-st-suckless-simple-terminal-from-source-on-arch-linux/
+
+```
+$ git pull --rebase
+```
+
+Fix merging conflicts.
+Update hashes to the `md5sums` array.
+```
+$ updpkgsums
+```
+
+Rebuild the package:
+```
+$ makepkg -si
+```
+ 
