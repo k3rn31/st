@@ -3,6 +3,11 @@
 # Contributor: Patrick Jackson <PatrickSJackson gmail com>
 # Contributor: Christoph Vigano <mail@cvigano.de>
 
+_patches=("https://st.suckless.org/patches/alpha/st-alpha-0.8.2.diff"
+          "https://st.suckless.org/patches/xresources/st-xresources-20190105-3be4cf1.diff"
+          "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.2.diff"
+          "https://st.suckless.org/patches/clipboard/st-clipboard-0.8.2.diff")
+
 pkgname=st
 pkgver=0.8.2
 pkgrel=10
@@ -13,15 +18,29 @@ depends=(libxft)
 url=https://st.suckless.org
 source=(https://dl.suckless.org/$pkgname/$pkgname-$pkgver.tar.gz
         terminfo.patch
-        README.terminfo.rst)
-sha256sums=(aeb74e10aa11ed364e1bcc635a81a523119093e63befd2f231f8b0705b15bf35
-            bf6c8b73a606a8e513c7919d91f93ed7aeb5f44e80269bb244cc01659145a5ea
-            0ebcbba881832adf9c98ce9fe7667c851d3cc3345077cb8ebe32702698665be2)
+        README.terminfo.rst 
+        "${_patches[@]}")
+sha256sums=('aeb74e10aa11ed364e1bcc635a81a523119093e63befd2f231f8b0705b15bf35'
+            'bf6c8b73a606a8e513c7919d91f93ed7aeb5f44e80269bb244cc01659145a5ea'
+            '0ebcbba881832adf9c98ce9fe7667c851d3cc3345077cb8ebe32702698665be2'
+            '9c5b4b4f23de80de78ca5ec3739dc6ce5e7f72666186cf4a9c6b614ac90fb285'
+            '71c55b796beebecb5e268405f369122fa5a8cf22d992725f00c6c88fe5895f84'
+            '9c5aedce2ff191437bdb78aa70894c3c91a47e1be48465286f42d046677fd166'
+            '7be1a09831f13361f5659aaad55110bde99b25c8ba826c11d1d7fcec21f32945')
 _sourcedir=$pkgname-$pkgver
 _makeopts="--directory=$_sourcedir"
 
 prepare() {
   patch --directory="$_sourcedir" --strip=0 < terminfo.patch
+
+  sed -i '1,31d' "$srcdir/$(basename ${_patches[0]})"
+  sed -i '1,55d' "$srcdir/$(basename ${_patches[1]})"
+  sed -i '1,24d' "$srcdir/$(basename ${_patches[2]})"
+
+  for patch in "${_patches[@]}"; do
+    echo "Applying patch $(basename $patch)..."
+    patch -d "$srcdir/$pkgname-$pkgver" -Np1 -i "$srcdir/$(basename $patch)"
+  done
 
   # This package provides a mechanism to provide a custom config.h. Multiple
   # configuration states are determined by the presence of two files in
