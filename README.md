@@ -10,6 +10,13 @@ Currently applied patches are:
 
 For reference read [how to build and install Suckless Simple Terminal](https://brianbuccola.com/how-to-build-and-install-st-suckless-simple-terminal-from-source-on-arch-linux/).
 
+## Add _aur_ remote
+Upon first cloning, add _aur_ remote.**
+
+```
+git remote add aur https://aur.archlinux.org/st.git
+```
+
 ## Rebase on the original AUR _st_
 When the original AUR _st_ package gets updated, it is necessary to
 _rebase_ onto the new HEAD and resolve merge conflicts.
